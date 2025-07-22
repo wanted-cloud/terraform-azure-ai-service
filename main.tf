@@ -1,9 +1,34 @@
 /*
- * # wanted-cloud/terraform-module-template
+ * # wanted-cloud/terraform-azure-ai-service
  * 
- * This repository represents a template for a Terraform building block module as we think it should be done, so it's for sure opinionated but in our eyes simple and powerful. Feel free to use or contribute.
+ * Terraform building block providing interface for creation of Azure AI Service.
  */
 
-/*
- * Here is perfect place for you main resource which should be created by this module. Use "this" as name for the main resource and its dependencies.
- */
+resource "azurerm_ai_services" "this" {
+  name                = var.name
+  location            = var.location != "" ? var.location : data.azurerm_resource_group.this.location
+  resource_group_name = data.azurerm_resource_group.this.name
+  sku_name            = var.sku_name
+
+  tags = merge(local.metadata.tags, var.tags)
+
+  timeouts {
+    create = try(
+      local.metadata.resource_timeouts["azurerm_ai_services"]["create"],
+      local.metadata.resource_timeouts["default"]["create"]
+    )
+    read = try(
+      local.metadata.resource_timeouts["azurerm_ai_services"]["read"],
+      local.metadata.resource_timeouts["default"]["read"]
+    )
+    update = try(
+      local.metadata.resource_timeouts["azurerm_ai_services"]["update"],
+      local.metadata.resource_timeouts["default"]["update"]
+    )
+    delete = try(
+      local.metadata.resource_timeouts["azurerm_ai_services"]["delete"],
+      local.metadata.resource_timeouts["default"]["delete"]
+    )
+  }
+
+}

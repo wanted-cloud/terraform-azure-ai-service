@@ -1,7 +1,7 @@
 <!-- BEGIN_TF_DOCS -->
-# wanted-cloud/terraform-module-template
+# wanted-cloud/terraform-azure-ai-service
 
-This repository represents a template for a Terraform building block module as we think it should be done, so it's for sure opinionated but in our eyes simple and powerful. Feel free to use or contribute.
+Terraform building block providing interface for creation of Azure AI Service.
 
 ## Table of contents
 
@@ -19,15 +19,76 @@ No requirements.
 
 ## Providers
 
-No providers.
+The following providers are used by this module:
+
+- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm)
 
 ## Required Inputs
 
-No required inputs.
+The following input variables are required:
+
+### <a name="input_name"></a> [name](#input\_name)
+
+Description: Name of the AI Service resource.
+
+Type: `string`
+
+### <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name)
+
+Description: Name of the resource group in which the AI Service will be created.
+
+Type: `string`
 
 ## Optional Inputs
 
 The following input variables are optional (have default values):
+
+### <a name="input_deployments"></a> [deployments](#input\_deployments)
+
+Description: List of deployments configuration to create for the AI Service.
+
+Type:
+
+```hcl
+list(object({
+    name = string
+    //cognitive_account_id       = string
+    dynamic_throttling_enabled = optional(bool, false)
+    rai_policy_name            = optional(string, null)
+    version_upgrade_option     = optional(string, "OnceNewDefaultVersionAvailable")
+    model = object({
+      name    = string
+      format  = string
+      version = optional(string, null)
+    })
+    sku = optional(object({
+      name     = string
+      capacity = optional(number, null)
+    }), null)
+    scale = optional(object({
+      type     = string
+      capacity = number
+    }), null)
+  }))
+```
+
+Default: `[]`
+
+### <a name="input_dynamic_throttling_enabled"></a> [dynamic\_throttling\_enabled](#input\_dynamic\_throttling\_enabled)
+
+Description: Enable dynamic throttling for the AI Service.
+
+Type: `bool`
+
+Default: `false`
+
+### <a name="input_location"></a> [location](#input\_location)
+
+Description: Location of the resource group in which the AI Service will be created, if not set it will be the same as the resource group.
+
+Type: `string`
+
+Default: `""`
 
 ### <a name="input_metadata"></a> [metadata](#input\_metadata)
 
@@ -55,13 +116,37 @@ object({
 
 Default: `{}`
 
+### <a name="input_sku_name"></a> [sku\_name](#input\_sku\_name)
+
+Description: The SKU name of the AI Service.
+
+Type: `string`
+
+Default: `"S0"`
+
+### <a name="input_tags"></a> [tags](#input\_tags)
+
+Description: Tags to be applied to the AI Service resources.
+
+Type: `map(string)`
+
+Default: `{}`
+
 ## Outputs
 
-No outputs.
+The following outputs are exported:
+
+### <a name="output_ai_service"></a> [ai\_service](#output\_ai\_service)
+
+Description: The Azure AI Service resource.
 
 ## Resources
 
-No resources.
+The following resources are used by this module:
+
+- [azurerm_ai_services.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/ai_services) (resource)
+- [azurerm_cognitive_deployment.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/cognitive_deployment) (resource)
+- [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resource_group) (data source)
 
 ## Usage
 
