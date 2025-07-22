@@ -2,7 +2,7 @@ resource "azurerm_cognitive_deployment" "this" {
   for_each = { for deployment in var.deployments : deployment.name => deployment }
 
   name                 = each.value.name
-  cognitive_account_id = azurerm_cognitive_account.this.id
+  cognitive_account_id = azurerm_ai_services.this.id
 
   dynamic_throttling_enabled = var.dynamic_throttling_enabled
   rai_policy_name            = each.value.rai_policy_name
