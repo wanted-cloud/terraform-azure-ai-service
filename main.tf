@@ -10,6 +10,15 @@ resource "azurerm_ai_services" "this" {
   resource_group_name = data.azurerm_resource_group.this.name
   sku_name            = var.sku_name
 
+  public_network_access = var.public_network_access_enabled ? "Enabled" : "Disabled"
+  custom_subdomain_name = var.custom_subdomain_name != "" ? var.custom_subdomain_name : null
+
+  identity {
+    type         = var.identity_type
+    identity_ids = var.user_assigned_identity_ids
+  }
+
+
   tags = merge(local.metadata.tags, var.tags)
 
   timeouts {

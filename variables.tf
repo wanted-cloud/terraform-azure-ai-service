@@ -56,3 +56,29 @@ variable "deployments" {
   }))
   default = []
 }
+// Managed identity configuration
+variable "identity_type" {
+  description = "Type of identity to use for the Azure service plan."
+  type        = string
+  default     = "SystemAssigned"
+}
+
+variable "user_assigned_identity_ids" {
+  description = "List of user assigned identity IDs for the Azure service plan."
+  type        = list(string)
+  default     = []
+}
+
+// Public network access
+variable "public_network_access_enabled" {
+  description = "Enable or disable public network access to the AI Service."
+  type        = bool
+  default     = true
+}
+
+// Custom subdomain name
+variable "custom_subdomain_name" {
+  description = "Custom subdomain name for the AI Service endpoint."
+  type        = string
+  default     = null
+}

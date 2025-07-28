@@ -47,6 +47,14 @@ Type: `string`
 
 The following input variables are optional (have default values):
 
+### <a name="input_custom_subdomain_name"></a> [custom\_subdomain\_name](#input\_custom\_subdomain\_name)
+
+Description: Custom subdomain name for the AI Service endpoint.
+
+Type: `string`
+
+Default: `null`
+
 ### <a name="input_deployments"></a> [deployments](#input\_deployments)
 
 Description: List of deployments configuration to create for the AI Service.
@@ -86,6 +94,14 @@ Type: `bool`
 
 Default: `false`
 
+### <a name="input_identity_type"></a> [identity\_type](#input\_identity\_type)
+
+Description: Type of identity to use for the Azure service plan.
+
+Type: `string`
+
+Default: `"SystemAssigned"`
+
 ### <a name="input_location"></a> [location](#input\_location)
 
 Description: Location of the resource group in which the AI Service will be created, if not set it will be the same as the resource group.
@@ -120,6 +136,14 @@ object({
 
 Default: `{}`
 
+### <a name="input_public_network_access_enabled"></a> [public\_network\_access\_enabled](#input\_public\_network\_access\_enabled)
+
+Description: Enable or disable public network access to the AI Service.
+
+Type: `bool`
+
+Default: `true`
+
 ### <a name="input_sku_name"></a> [sku\_name](#input\_sku\_name)
 
 Description: The SKU name of the AI Service.
@@ -135,6 +159,14 @@ Description: Tags to be applied to the AI Service resources.
 Type: `map(string)`
 
 Default: `{}`
+
+### <a name="input_user_assigned_identity_ids"></a> [user\_assigned\_identity\_ids](#input\_user\_assigned\_identity\_ids)
+
+Description: List of user assigned identity IDs for the Azure service plan.
+
+Type: `list(string)`
+
+Default: `[]`
 
 ## Outputs
 
@@ -172,6 +204,21 @@ The minimal usage for the module is as follows:
 ```hcl
 module "template" {
     source = "../.."
+
+    name                = "example-ai-service"
+    resource_group_name = "example-rg"
+
+    deployments = [{
+      name = "example-deployment-embedding"
+      model = {
+        name    = "text-embedding-3-large"
+        format  = "OpenAI"
+        version = "1"
+    }
+      sku = {
+        name = "Standard"
+      }
+    }]
 }
 ```
 ## Contributing
